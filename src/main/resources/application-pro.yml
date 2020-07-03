@@ -21,7 +21,7 @@ spring:
     maxOpenPreparedStatements: 20
 mybatis:
   mapper-locations: classpath*:mapper/*.xml
-  type-aliases-package: online.blog.mapper
+  type-aliases-package: online.blog.dao
 
 logging:
   file:

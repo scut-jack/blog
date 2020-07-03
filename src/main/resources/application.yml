@@ -3,9 +3,22 @@ server:
 
 spring:
   thymeleaf:
+    prefix: classpath:/templates/
+    check-template-location: true
+    suffix: .html
     mode: HTML
+    encoding: UTF-8
+    cache: false
   profiles:
     active: pro
 
+comment.avatar: /images/avatar.png
+message.avatar: /images/avatar.png
+
+pagehelper:
+  helper-dialect: mysql
+  params: count=countSql
+  reasonable: true
+  support-methods-arguments: true
 #mybatis:
 #  mapper-locations: classpath*:mapper/*.xml

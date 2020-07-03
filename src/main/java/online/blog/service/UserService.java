@@ -1,13 +1,11 @@
 package online.blog.service;
 
-import online.blog.pojo.User;
-
-import java.util.List;
+import online.blog.entity.User;
 
 /**
- * @author jack
- * @date 2020/7/1-13:46
+ * @Description: 用户业务层接口
  */
 public interface UserService {
-    List<User> getAllUser();
+    //核对用户名和密码
+    User checkUser(String username, String password);
 }
