@@ -194,16 +194,16 @@ body{
 
 /*-----opacity------*/
 .m-opacity {
-    opacity: 0.9 !important;
+    opacity: 1.0 !important;
 }
 .m-opacity-mini {
-    opacity: 0.8 !important;
+    opacity: 0.9 !important;
 }
 .m-opacity-tiny {
-    opacity: 0.6 !important;
+    opacity: 0.9 !important;
 }
 .m-opacity-small {
-    opacity: 0.4 !important;
+    opacity: 0.9 !important;
 }
 
 /*------position---*/
