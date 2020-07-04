@@ -35,6 +35,7 @@ public class CommentServiceImpl implements CommentService {
         //查询出父节点
         List<Comment> comments = commentDao.findByBlogIdParentIdNull(blogId, Long.parseLong("-1"));
         for(Comment comment : comments){
+            comment.setBlogId(blogId);//自己添加！
             Long id = comment.getId();
             String parentNickname1 = comment.getNickname();
             List<Comment> childComments = commentDao.findByBlogIdParentIdNotNull(blogId,id);
@@ -51,6 +52,7 @@ public class CommentServiceImpl implements CommentService {
         if(childComments.size() > 0){
 //                循环找出子评论的id
             for(Comment childComment : childComments){
+                childComment.setBlogId(blogId);//自己添加！
                 String parentNickname = childComment.getNickname();
                 childComment.setParentNickname(parentNickname1);
                 tempReplys.add(childComment);
@@ -67,6 +69,7 @@ public class CommentServiceImpl implements CommentService {
 
         if(replayComments.size() > 0){
             for(Comment replayComment : replayComments){
+                replayComment.setBlogId(blogId);//自己添加！
                 String parentNickname = replayComment.getNickname();
                 replayComment.setParentNickname(parentNickname1);
                 Long replayId = replayComment.getId();

@@ -20,9 +20,11 @@
 <nav class="gird-header">
     <div class="ui container">
         <div class="ui inverted secondary stackable menu">
-            <h2 class="ui olive header item" style="font-family: STSong">Blog</h2>
+            <h2 class="ui olive header item" style="font-family: STSong">
+                <a href="#" th:href="@{/}"/>Blog
+            </h2>
             <!--<div class="right m-item item m-mobile-hide">-->
-            <a href="#" th:href="@{/}" class="m-item item m-mobile-hide "><i class="home icon"></i>首页</a>
+            <!--<a href="#" th:href="@{/}" class="m-item item m-mobile-hide "><i class="home icon"></i>首页</a>-->
             <a href="#" th:href="@{/types/-1}" class="m-item item m-mobile-hide"><i
                     class="clone outline icon"></i>分类</a>
             <a href="#" th:href="@{/archives}" class="m-item item m-mobile-hide"><i class="clock icon"></i>时间轴</a>
@@ -728,8 +730,8 @@ h5,h6{font-size:1em;}
         </div>
         <div class="ui inverted section divider"></div>
         <div style="color: #F08047;margin-top: -18px" class="ui inverted m-text-thin m-text-spaced">
-            <a rel="nofollow" href="http://www.beian.miit.gov.cn" target="_blank">湘ICP备19026624号</a>
-        </div>
+        <a rel="nofollow" href="http://www.beian.miit.gov.cn" target="_blank">湘ICP备19026624号</a>
+    </div>
     </div>
     </div>
 

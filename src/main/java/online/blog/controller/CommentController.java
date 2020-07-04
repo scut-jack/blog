@@ -36,13 +36,22 @@ public class CommentController {
     @GetMapping("/comments/{blogId}")
     public String comments(@PathVariable Long blogId, Model model) {
         List<Comment> comments = commentService.listCommentByBlogId(blogId);
+        /*for (Comment c:comments){
+            c.setBlogId(blogId);
+            for (Comment c1:c.getReplyComments()){
+                c1.setBlogId(blogId);
+            }
+            //打印测试！是否把blogId参数传到comment中的blogId属性中去了
+            System.out.println(c.getBlogId()+"====="+c.getId()+"!!!!");
+
+        }*/
         model.addAttribute("comments", comments);
         return "blog :: commentList";
     }
 
-     //新增评论
+    //新增评论
     @PostMapping("/comments")
-    public String post(Comment comment, HttpSession session,Model model) {
+    public String post(Comment comment, HttpSession session, Model model) {
         Long blogId = comment.getBlogId();
         User user = (User) session.getAttribute("user");
         if (user != null) {
@@ -64,8 +73,8 @@ public class CommentController {
 
     //删除评论
     @GetMapping("/comment/{blogId}/{id}/delete")
-    public String delete(@PathVariable Long blogId, @PathVariable Long id,Comment comment, RedirectAttributes attributes, Model model){
-        commentService.deleteComment(comment,id);
+    public String delete(@PathVariable("blogId") Long blogId, @PathVariable Long id, Comment comment, RedirectAttributes attributes, Model model) {
+        commentService.deleteComment(comment, id);
         DetailedBlog detailedBlog = blogService.getDetailedBlog(blogId);
         List<Comment> comments = commentService.listCommentByBlogId(blogId);
         model.addAttribute("blog", detailedBlog);
