@@ -84,7 +84,7 @@ public class CommentServiceImpl implements CommentService {
     public int saveComment(Comment comment) {
         comment.setCreateTime(new Date());
         int comments = commentDao.saveComment(comment);
-//        文章评论计数
+        //文章评论计数,查询出文章评论数量并更新
         blogDao.getCommentCountById(comment.getBlogId());
         return comments;
     }
