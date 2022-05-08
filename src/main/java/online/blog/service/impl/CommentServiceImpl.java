@@ -1,23 +1,24 @@
 package online.blog.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
+import lombok.extern.slf4j.Slf4j;
 import online.blog.dao.BlogDao;
 import online.blog.dao.CommentDao;
 import online.blog.entity.Comment;
 import online.blog.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
- * @Description: 博客评论业务层接口实现类
- * @Author: ONESTAR
- * @Date: Created in 13:28 2020/4/5
- * @QQ群: 530311074
- * @URL: https://onestar.newstar.net.cn/
+ * @description: 博客评论业务层接口实现类
+ * @date 2022/04/17
  */
+@Slf4j
 @Service
 public class CommentServiceImpl implements CommentService {
 
@@ -27,72 +28,70 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private BlogDao blogDao;
 
-    //存放迭代找出的所有子代的集合
-    private List<Comment> tempReplys = new ArrayList<>();
-
+    /**
+     * @param blogId 博客ID，标识一篇博客
+     * @description: 查询单篇博客下的所有评论，单条评论的数据结构：评论 + 回复列表
+     * @date 2022/04/17
+     */
     @Override
     public List<Comment> listCommentByBlogId(Long blogId) {
-        //查询出父节点
-        List<Comment> comments = commentDao.findByBlogIdParentIdNull(blogId, Long.parseLong("-1"));
-        for(Comment comment : comments){
-            comment.setBlogId(blogId);//自己添加！
-            Long id = comment.getId();
-            String parentNickname1 = comment.getNickname();
-            List<Comment> childComments = commentDao.findByBlogIdParentIdNotNull(blogId,id);
-//            查询出子评论
-            combineChildren(blogId, childComments, parentNickname1);
-            comment.setReplyComments(tempReplys);
-            tempReplys = new ArrayList<>();
+        // 查询出父节点列表
+        List<Comment> comments = commentDao.findCommentsByBlogId(blogId, -1l);
+        List<Comment> replyList = new ArrayList<>();// 评论回复
+        if (!CollectionUtil.isEmpty(comments)) {
+            for (Comment c : comments) {
+                if (c != null) {
+                    processReply(replyList, blogId, c.getId(), c.getNickname());
+                    c.setReplyComments(replyList);
+                    replyList = new ArrayList<>();// 每条评论都需管理一个评论回复列表
+                }
+            }
         }
+        log.debug("Blog's comments:{}", comments);
         return comments;
     }
 
-    private void combineChildren(Long blogId, List<Comment> childComments, String parentNickname1) {
-//        判断是否有一级子评论
-        if(childComments.size() > 0){
-//                循环找出子评论的id
-            for(Comment childComment : childComments){
-                childComment.setBlogId(blogId);//自己添加！
-                String parentNickname = childComment.getNickname();
-                childComment.setParentNickname(parentNickname1);
-                tempReplys.add(childComment);
-                Long childId = childComment.getId();
-//                    查询出子二级评论
-                recursively(blogId, childId, parentNickname);
+    private void processReply(List<Comment> replyList, Long blogId, Long commentId, String parentNickname) {
+        List<Comment> childComments = commentDao.findCommentsByBlogId(blogId, commentId);
+        if (!CollectionUtil.isEmpty(childComments)) {
+            replyList.addAll(childComments);
+            for (Comment c : childComments) {
+                if (c != null) {
+                    c.setParentNickname(parentNickname);
+                    processReply(replyList, blogId, c.getId(), c.getNickname());
+                }
             }
         }
     }
 
-    private void recursively(Long blogId, Long childId, String parentNickname1) {
-//        根据子一级评论的id找到子二级评论
-        List<Comment> replayComments = commentDao.findByBlogIdAndReplayId(blogId,childId);
-
-        if(replayComments.size() > 0){
-            for(Comment replayComment : replayComments){
-                replayComment.setBlogId(blogId);//自己添加！
-                String parentNickname = replayComment.getNickname();
-                replayComment.setParentNickname(parentNickname1);
-                Long replayId = replayComment.getId();
-                tempReplys.add(replayComment);
-                recursively(blogId,replayId,parentNickname);
-            }
-        }
-    }
-
-//    新增评论
+    /**
+     * @param comment
+     * @description: 新增评论
+     * @date 2022/04/17
+     */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int saveComment(Comment comment) {
         comment.setCreateTime(new Date());
         int comments = commentDao.saveComment(comment);
+        log.info("Save the comment successfully.");
         //文章评论计数,查询出文章评论数量并更新
         blogDao.getCommentCountById(comment.getBlogId());
+        log.info("Blog comment number updated successfully.");
         return comments;
     }
 
-//    删除评论
+    /**
+     * @param comment,id
+     * @description: 删除评论
+     * @date 2022/04/17
+     */
     @Override
-    public void deleteComment(Comment comment,Long id) {
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteComment(Comment comment, Long id) {
         commentDao.deleteComment(id);
+        log.info("The comment has been deleted.");
         blogDao.getCommentCountById(comment.getBlogId());
+        log.info("Blog comment number minus one.");
     }
 }

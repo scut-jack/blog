@@ -3,6 +3,7 @@ package online.blog.dao;
 import online.blog.entity.Blog;
 import online.blog.queryvo.*;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -30,10 +31,11 @@ public interface BlogDao {
 
     //查询首页最新博客列表信息
     List<FirstPageBlog> getFirstPageBlog();
-    //查询首页最新推荐信息
-    List<RecommendBlog> getAllRecommendBlog();
 
-//    List<FirstPageBlog> getNewBlog();
+    //查询首页特别推荐博客（阅读量最多的几篇博客）
+    List<RecommendBlog> getAllRecommendBlog(@Param("recommendedBlogCount") Integer recommendedBlogCount);
+
+    //    List<FirstPageBlog> getNewBlog();
     //搜索博客列表
     List<FirstPageBlog> getSearchBlog(String query);
 
@@ -41,16 +43,20 @@ public interface BlogDao {
 
     int updateViews(Long id);
 
-//    根据博客id查询出评论数量
+    //    根据博客id查询出评论数量
     int getCommentCountById(Long id);
 
     List<FirstPageBlog> getByTypeId(Long typeId);
+
     //统计博客总数
     Integer getBlogTotal();
+
     //统计访问总数
     Integer getBlogViewTotal();
+
     //统计评论总数
     Integer getBlogCommentTotal();
+
     //统计留言总数
     Integer getBlogMessageTotal();
 }

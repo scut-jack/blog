@@ -8,14 +8,14 @@ import java.util.Date;
  */
 public class User {
     private Long id;
-    private String nickname;
-    private String username;
-    private String password;
-    private String email;
-    private String avatar;
+    private String nickname;// 昵称，博客页面展示
+    private String username;// 用户名，登录后台所需
+    private String password;// 用户密码，登录后台所需
+    private String email;// 用户邮箱
+    private String avatar;// 用户头像，博客页展示
     private Integer type;
-    private Date createTime;
-    private Date updateTime;
+    private Date createTime;// 创建时间
+    private Date updateTime;// 更新时间
 
     public Long getId() {
         return id;

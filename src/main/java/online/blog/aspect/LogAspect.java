@@ -33,7 +33,7 @@ public class LogAspect {
         String classMethod = joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName();
         Object[] args = joinPoint.getArgs();
         RequestLog requestLog = new RequestLog(url, ip, classMethod, args);
-        logger.info("Request : {}", requestLog);
+//        logger.info("Request : {}", requestLog);
     }
 
     @After("log()")
@@ -43,7 +43,7 @@ public class LogAspect {
 
     @AfterReturning(returning = "result",pointcut = "log()")
     public void doAfterRuturn(Object result) {
-        logger.info("Result : {}", result);
+//        logger.info("Result : {}", result);
     }
 
     private class RequestLog {

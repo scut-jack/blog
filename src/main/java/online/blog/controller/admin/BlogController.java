@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
+
 /**
  * @Description: 后台博客管理控制器
  */
@@ -28,33 +29,34 @@ public class BlogController {
 
     @Autowired
     private BlogService blogService;
+
     @Autowired
     private TypeService typeService;
 
     //博客列表
     @RequestMapping("/blogs")
-    public String blogs(Model model, @RequestParam(defaultValue = "1",value = "pageNum") Integer pageNum){
+    public String blogs(Model model, @RequestParam(defaultValue = "1", value = "pageNum") Integer pageNum) {
         //按照排序字段 倒序 排序
         String orderBy = "update_time desc";
-        PageHelper.startPage(pageNum,10,orderBy);
+        PageHelper.startPage(pageNum, 5, orderBy);
         List<BlogQuery> list = blogService.getAllBlog();
         PageInfo<BlogQuery> pageInfo = new PageInfo<>(list);
-        model.addAttribute("types",typeService.getAllType());
-        model.addAttribute("pageInfo",pageInfo);
+        model.addAttribute("types", typeService.getAllType());
+        model.addAttribute("pageInfo", pageInfo);
         return "admin/blogs";
     }
 
     //跳转博客新增页面
     @GetMapping("/blogs/input")
     public String input(Model model) {
-        model.addAttribute("types",typeService.getAllType());
+        model.addAttribute("types", typeService.getAllType());
         model.addAttribute("blog", new Blog());
         return "admin/blogs-input";
     }
 
     //博客新增
     @PostMapping("/blogs")
-    public String post(Blog blog, RedirectAttributes attributes, HttpSession session){
+    public String post(Blog blog, RedirectAttributes attributes, HttpSession session) {
         blog.setUser((User) session.getAttribute("user"));
         //设置blog的type
         blog.setType(typeService.getType(blog.getType().getId()));
@@ -64,9 +66,9 @@ public class BlogController {
         blog.setUserId(blog.getUser().getId());
         int b = blogService.saveBlog(blog);
 
-        if(b == 0){
+        if (b == 0) {
             attributes.addFlashAttribute("message", "新增失败");
-        }else {
+        } else {
             attributes.addFlashAttribute("message", "新增成功");
         }
         return "redirect:/admin/blogs";
@@ -94,18 +96,18 @@ public class BlogController {
     @PostMapping("/blogs/{id}")
     public String editPost(@Valid ShowBlog showBlog, RedirectAttributes attributes) {
         int b = blogService.updateBlog(showBlog);
-        if(b ==0){
+        if (b == 0) {
             attributes.addFlashAttribute("message", "修改失败");
-        }else {
+        } else {
             attributes.addFlashAttribute("message", "修改成功");
         }
         return "redirect:/admin/blogs";
     }
 
-//    搜索博客
+    //    搜索博客
     @PostMapping("/blogs/search")
     public String search(SearchBlog searchBlog, Model model,
-                         @RequestParam(defaultValue = "1",value = "pageNum") Integer pageNum) {
+                         @RequestParam(defaultValue = "1", value = "pageNum") Integer pageNum) {
         List<BlogQuery> blogBySearch = blogService.getBlogBySearch(searchBlog);
         PageHelper.startPage(pageNum, 10);
         PageInfo<BlogQuery> pageInfo = new PageInfo<>(blogBySearch);

@@ -12,22 +12,17 @@ import java.util.List;
 public class Comment {
 
     private Long id;
-    private String nickname;
-    private String email;
-    private String content;
-
-    //头像
-    private String avatar;
-    private Date createTime;
-
-    private Long blogId;
-    private Long parentCommentId;
-    private String parentNickname;
-
-    //回复评论
-    private List<Comment> replyComments = new ArrayList<>();
+    private String nickname;// 评论人昵称，展示
+    private String email;// 评论人邮箱，不展示
+    private String content;// 评论内容
+    private String avatar;// 评论人头像
+    private Date createTime;// 评论创建时间
+    private Long blogId;// 评论所属博客ID
+    private Long parentCommentId;// 父评论ID
+    private String parentNickname;// 父评论昵称
+    private List<Comment> replyComments = new ArrayList<>();// 回复评论
     private Comment parentComment;
-    private boolean adminComment;
+    private boolean adminComment;// 是否为管理员评论
 
     private DetailedBlog blog;
 

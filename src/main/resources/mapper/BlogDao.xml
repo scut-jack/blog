@@ -25,28 +25,41 @@
 
     <!--新增保存文章-->
     <insert id="saveBlog" parameterType="online.blog.entity.Blog">
-        insert into myblog.t_blog (id,title, content, first_picture, flag,
-        views, comment_count, appreciation, share_statement, commentabled, published,
-        recommend, create_time, update_time, type_id, user_id, description)
-        values (#{id},#{title},#{content},#{firstPicture},#{flag},#{views},#{commentCount},#{appreciation},
-        #{shareStatement},#{commentabled},#{published},#{recommend},#{createTime},
-        #{updateTime},#{typeId},#{userId},#{description});
+        insert into myblog.t_blog (id, title, content, first_picture, flag,
+                                   views, comment_count, appreciation, share_statement, commentabled, published,
+                                   recommend, create_time, update_time, type_id, user_id, description)
+        values (#{id}, #{title}, #{content}, #{firstPicture}, #{flag}, #{views}, #{commentCount}, #{appreciation},
+                #{shareStatement}, #{commentabled}, #{published}, #{recommend}, #{createTime},
+                #{updateTime}, #{typeId}, #{userId}, #{description});
     </insert>
 
     <!--查询所有文章-->
     <select id="getAllBlog" resultType="online.blog.entity.Blog">
-        select * from myblog.t_blog
+        select *
+        from myblog.t_blog
     </select>
 
     <!--查询文章管理列表-->
     <select id="getAllBlogQuery" resultMap="blog">
-        select b.id,b.title,b.update_time,b.recommend,b.published,b.type_id,t.id,t.name from myblog.t_blog b left outer join
-        myblog.t_type t on b.type_id = t.id order by b.update_time desc
+        select b.id,
+               b.title,
+               b.update_time,
+               b.recommend,
+               b.published,
+               b.type_id,
+               t.id,
+               t.name
+        from myblog.t_blog b
+                 left outer join
+             myblog.t_type t on b.type_id = t.id
+        order by b.update_time desc
     </select>
 
     <!--删除文章-->
     <delete id="deleteBlog">
-        delete from myblog.t_blog where id = #{id}
+        delete
+        from myblog.t_blog
+        where id = #{id}
     </delete>
 
 
@@ -67,24 +80,44 @@
     </resultMap>
 
     <!--查询编辑修改文章-->
-    <select id="getBlogById" resultMap="showblog" >
-        select b.id,b.flag,b.title,b.content,b.type_id,
-        b.first_picture,b.description,b.recommend,b.published,b.share_statement,
-        b.appreciation,b.commentabled from myblog.t_blog b  where  b.id = #{id};
+    <select id="getBlogById" resultMap="showblog">
+        select b.id,
+               b.flag,
+               b.title,
+               b.content,
+               b.type_id,
+               b.first_picture,
+               b.description,
+               b.recommend,
+               b.published,
+               b.share_statement,
+               b.appreciation,
+               b.commentabled
+        from myblog.t_blog b
+        where b.id = #{id};
     </select>
 
     <!--编辑修改文章-->
     <update id="updateBlog" parameterType="online.blog.queryvo.ShowBlog">
-        update myblog.t_blog set published = #{published},flag = #{flag} ,
-        title = #{title}, content = #{content}, type_id = #{typeId},
-        first_picture = #{firstPicture} , description = #{description} , recommend = #{recommend} ,
-        share_statement = #{shareStatement}, appreciation = #{appreciation},
-        commentabled = #{commentabled} ,update_time = #{updateTime} where id = #{id};
+        update myblog.t_blog
+        set published       = #{published},
+            flag            = #{flag},
+            title           = #{title},
+            content         = #{content},
+            type_id         = #{typeId},
+            first_picture   = #{firstPicture},
+            description     = #{description},
+            recommend       = #{recommend},
+            share_statement = #{shareStatement},
+            appreciation    = #{appreciation},
+            commentabled    = #{commentabled},
+            update_time     = #{updateTime}
+        where id = #{id};
     </update>
 
 
     <select id="searchByTitleOrTypeOrRecommend" parameterType="online.blog.queryvo.SearchBlog" resultMap="blog">
-        <bind name="pattern" value="'%' + title + '%'" />
+        <bind name="pattern" value="'%' + title + '%'"/>
         select b.id,b.title,b.update_time,b.recommend,b.type_id,t.id,t.name from myblog.t_blog b ,myblog.t_type t
         <where>
             <if test="1 == 1">
@@ -114,12 +147,22 @@
         <result property="avatar" column="avatar"/>
     </resultMap>
 
+    <!--查询首页展示的文章-->
     <select id="getFirstPageBlog" resultMap="firstPageBlog">
-        select b.id,b.title,b.first_picture, b.views, b.comment_count,b.update_time,b.description,
-        t.name ,
-        u.nickname, u.avatar
-        from myblog.t_blog b, myblog.t_type t,myblog.t_user u
-        where b.type_id = t.id and  u.id = b.user_id order by b.update_time desc
+        select b.id,
+               b.title,
+               b.first_picture,
+               b.views,
+               b.comment_count,
+               b.update_time,
+               b.description,
+               t.name,
+               u.nickname,
+               u.avatar
+        from myblog.t_blog b
+                 join myblog.t_type t on b.type_id = t.id
+                 join myblog.t_user u on b.user_id = u.id
+        order by b.update_time desc
     </select>
 
     <resultMap id="recommendBlog" type="online.blog.queryvo.RecommendBlog">
@@ -131,22 +174,27 @@
 
     <!--推荐文章-->
     <select id="getAllRecommendBlog" resultMap="recommendBlog">
-        select * from myblog.t_blog where t_blog.recommend = true order by t_blog.update_time desc limit 4;
+        select *
+        from myblog.t_blog
+        where t_blog.recommend = true
+        order by t_blog.update_time desc limit #{recommendedBlogCount}
     </select>
 
     <!--最新文章-->
     <!--<select id="getNewBlog" resultMap="firstPageBlog">-->
-        <!--select * from myblog.t_blog order by t_blog.update_time desc limit 3;-->
+    <!--select * from myblog.t_blog order by t_blog.update_time desc limit 3;-->
     <!--</select>-->
 
     <!--搜索文章-->
     <select id="getSearchBlog" resultMap="firstPageBlog">
-        <bind name="pattern" value="'%' + query + '%'" />
+        <bind name="pattern" value="'%' + query + '%'"/>
         select b.id,b.title,b.first_picture, b.views,b.comment_count,b.update_time,b.description,
         t.name ,
         u.nickname, u.avatar
-        from myblog.t_blog b, myblog.t_type t,myblog.t_user u
-        where b.type_id = t.id and  u.id = b.user_id and (b.title like #{pattern} or b.content like  #{pattern})
+        from myblog.t_blog b
+        join myblog.t_type t on b.type_id = t.id
+        join myblog.t_user u on b.user_id = u.id
+        where b.title like #{pattern} or b.content like #{pattern}
         order by b.update_time desc
     </select>
 
@@ -170,43 +218,80 @@
 
     <!--博客详情查询-->
     <select id="getDetailedBlog" resultMap="detailedBlog">
-        select b.id bid,b.first_picture,b.flag,b.title,b.content,b.views,b.comment_count,b.update_time,b.commentabled,b.share_statement,b.appreciation, u.nickname,u.avatar,t.name
-        from myblog.t_blog b,myblog.t_user u, myblog.t_type t
-        where b.user_id = u.id and b.type_id = t.id and b.id = #{id}
+        select b.id bid,
+               b.first_picture,
+               b.flag,
+               b.title,
+               b.content,
+               b.views,
+               b.comment_count,
+               b.update_time,
+               b.commentabled,
+               b.share_statement,
+               b.appreciation,
+               u.nickname,
+               u.avatar,
+               t.name
+        from myblog.t_blog b,
+             myblog.t_user u,
+             myblog.t_type t
+        where b.user_id = u.id
+          and b.type_id = t.id
+          and b.id = #{id}
     </select>
 
     <!--文章访问自增-->
     <update id="updateViews" parameterType="online.blog.entity.Blog">
-        update myblog.t_blog b set b.views = b.views+1 where b.id = #{id}
+        update myblog.t_blog b
+        set b.views = b.views + 1
+        where b.id = #{id}
     </update>
 
     <!--查询出文章评论数量并更新-->
     <update id="getCommentCountById" parameterType="online.blog.entity.Blog">
-        update myblog.t_blog b set b.comment_count = (
-        select count(*) from myblog.t_comment c where c.blog_id = #{id} and b.id = #{id}
-        ) WHERE b.id = #{id}
+        update myblog.t_blog b
+        set b.comment_count = (
+            select count(*) from myblog.t_comment c where c.blog_id = #{id} and b.id = #{id}
+        )
+        WHERE b.id = #{id}
     </update>
 
     <!--分类页面查询-->
     <select id="getByTypeId" resultMap="firstPageBlog">
-        select b.id,b.title,b.first_picture, b.views, b.comment_count, b.update_time, b.description,
-        t.name ,
-        u.nickname, u.avatar
-        from myblog.t_blog b, myblog.t_type t,myblog.t_user u
-        where b.type_id = t.id and u.id = b.user_id and b.type_id = #{typeId} order by b.update_time desc
+        select b.id,
+               b.title,
+               b.first_picture,
+               b.views,
+               b.comment_count,
+               b.update_time,
+               b.description,
+               t.name,
+               u.nickname,
+               u.avatar
+        from myblog.t_blog b,
+             myblog.t_type t,
+             myblog.t_user u
+        where b.type_id = t.id
+          and u.id = b.user_id
+          and b.type_id = #{typeId}
+        order by b.update_time desc
     </select>
 
     <!--统计博客信息-->
     <select id="getBlogTotal" resultType="Integer">
-        select count(*) from myblog.t_blog
+        select count(*)
+        from myblog.t_blog
     </select>
     <select id="getBlogViewTotal" resultType="Integer">
-        select sum(views) from myblog.t_blog
+        select sum(views)
+        from myblog.t_blog
     </select>
     <select id="getBlogCommentTotal" resultType="Integer">
-        select count(*) from myblog.t_comment
+        select count(*)
+        from myblog.t_comment
     </select>
     <select id="getBlogMessageTotal" resultType="Integer">
-        select count(*) from myblog.t_message
+        select count(*)
+        from myblog.t_message
     </select>
 </mapper>

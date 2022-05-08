@@ -1,5 +1,6 @@
 package online.blog.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import online.blog.entity.Comment;
 import online.blog.entity.User;
 import online.blog.queryvo.DetailedBlog;
@@ -12,44 +13,47 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
- * @Description: 评论控制器
+ * @description: 评论控制器
+ * @date 2022/04/17
  */
+@Slf4j
 @Controller
 public class CommentController {
 
     @Autowired
     private CommentService commentService;
 
-    @Autowired
-    private BlogService blogService;
-
     @Value("${comment.avatar}")
     private String avatar;
 
-    //查询评论列表
+    /**
+     * @param blogId
+     * @description: 查询单篇博客的评论列表
+     * @date 2022/04/17
+     */
     @GetMapping("/comments/{blogId}")
-    public String comments(@PathVariable Long blogId, Model model) {
+    public ModelAndView comments(@PathVariable Long blogId) {
         List<Comment> comments = commentService.listCommentByBlogId(blogId);
-        /*for (Comment c:comments){
-            c.setBlogId(blogId);
-            for (Comment c1:c.getReplyComments()){
-                c1.setBlogId(blogId);
-            }
-            //打印测试！是否把blogId参数传到comment中的blogId属性中去了
-            System.out.println(c.getBlogId()+"====="+c.getId()+"!!!!");
+        log.debug("Blog' comments,{}", comments);
 
-        }*/
-        model.addAttribute("comments", comments);
-        return "blog :: commentList";
+        ModelAndView mv = new ModelAndView();
+        mv.addObject("comments", comments);
+        mv.setViewName("blog :: commentList");
+        return mv;
     }
 
-    //新增评论
+    /**
+     * @param comment,session,model
+     * @description: 博客下新增评论，包括新增回复评论和新增初始评论
+     * @date 2022/04/17
+     */
     @PostMapping("/comments")
     public String post(Comment comment, HttpSession session, Model model) {
         Long blogId = comment.getBlogId();
@@ -58,8 +62,7 @@ public class CommentController {
             comment.setAvatar(user.getAvatar());
             comment.setAdminComment(true);
         } else {
-            //设置头像
-            comment.setAvatar(avatar);
+            comment.setAvatar(avatar);// 设置头像
         }
 
         if (comment.getParentComment().getId() != null) {
@@ -71,15 +74,16 @@ public class CommentController {
         return "blog :: commentList";
     }
 
-    //删除评论
+    /**
+     * @param blogId,comment
+     * @description: 删除评论，只有管理员有删除权限
+     * @date 2022/04/17
+     */
     @GetMapping("/comment/{blogId}/{id}/delete")
-    public String delete(@PathVariable("blogId") Long blogId, @PathVariable Long id, Comment comment, RedirectAttributes attributes, Model model) {
+    public String delete(@PathVariable("blogId") Long blogId, @PathVariable Long id, Comment comment) {
         commentService.deleteComment(comment, id);
-        DetailedBlog detailedBlog = blogService.getDetailedBlog(blogId);
-        List<Comment> comments = commentService.listCommentByBlogId(blogId);
-        model.addAttribute("blog", detailedBlog);
-        model.addAttribute("comments", comments);
-        return "blog";
+        // 删除评论后转发到博客详情页
+        return "forward:/blog/" + blogId;
     }
 
 }

@@ -5,33 +5,31 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @Description: 博客实体类
+ * @description: 博客实体类, 和数据库交互(包含数据库不存在的字段)
+ * @date 2022/04/17
  */
 public class Blog {
 
-    private Long id;
-    private String title;
-    private String content;
-    private String firstPicture;
+    private Long id;// 主键，标识不同博客
+    private String title;// 博客标题
+    private String content;// 博客内容
+    private String firstPicture;// 博客封面图片
     private String flag;
-    private Integer views;
-
-    private Integer commentCount;
-
-    private boolean appreciation;
-    private boolean shareStatement;
-    private boolean commentabled;
-    private boolean published;
-    private boolean recommend;
-    private Date createTime;
-    private Date updateTime;
-
-    private Long typeId;
-    private Long userId;
-    private String description;
-    private Type type;
-    private User user;
-    private List<Comment> comments = new ArrayList<>();
+    private Integer views;// 博客被查看次数
+    private Integer commentCount;// 博客的评论数量
+    private boolean appreciation;// 是否开启博客赞赏
+    private boolean shareStatement;// 是否开启转载声明
+    private boolean commentabled;// 是否开启博客下评论栏
+    private boolean published;// 是否发布，后台博客状态：发布，草稿
+    private boolean recommend;// 是否推荐（即是否展示在前端推荐栏）
+    private Date createTime;// 创建时间
+    private Date updateTime;// 更新时间
+    private Long typeId;// 分类ID，关联分类表
+    private Long userId;// 用户ID，关联用户表
+    private String description;// 博客简介，首页展示
+    private Type type;// 该博客所属分类
+    private User user;// 该博客的创建者
+    private List<Comment> comments = new ArrayList<>();// 博客的所有评论
 
     public Blog() {
     }

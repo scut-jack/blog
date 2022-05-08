@@ -15,21 +15,18 @@
     <div class="ui container">
         <div class="ui inverted secondary stackable menu">
             <h2 class="ui olive header item" style="font-family: STSong">
-                <a href="#" th:href="@{/}"/>Blog
+                <a href="#" th:href="@{/}"/>首页
             </h2>
             <!--<div class="right m-item item m-mobile-hide">-->
             <!--<a href="#" th:href="@{/}" class="m-item item m-mobile-hide "><i class="home icon"></i>首页</a>-->
             <a href="#" th:href="@{/types/-1}" class="m-item item m-mobile-hide"><i class="clone outline icon"></i>分类</a>
-            <a href="#" th:href="@{/archives}" class="m-item item m-mobile-hide"><i class="clock icon"></i>时间轴</a>
-            <a href="#" th:href="@{/message}" class="m-item item m-mobile-hide"><i class="book icon"></i>留言板</a>
-            <a href="#" th:href="@{/picture}" class="m-item item m-mobile-hide"><i class="image icon"></i>回忆</a>
-            <a href="#" th:href="@{/about}" class="active m-item item m-mobile-hide"><i class="info icon"></i>关于我</a>
             <a href="#" th:href="@{/friends}" class="m-item item"><i class="pencil alternate icon"></i>链接</a>
-            <a href="#" th:href="@{/admin}" class="m-item item m-mobile-hide">    登录</a>
-            <a href="#" th:href="@{/admin/blogs}" class="m-item item m-mobile-hide">    后台</a>
+            <a href="#" th:href="@{/archives}" class="m-item item m-mobile-hide"><i class="clock icon"></i>时间轴</a>
+            <a href="#" th:href="@{/admin}" class="m-item item m-mobile-hide">登录</a>
+            <a href="#" th:href="@{/admin/blogs}" class="m-item item m-mobile-hide">后台</a>
             <!--</div>-->
             <div class="right m-item item m-mobile-hide">
-                <form name="search" action="#" th:action="@{/search}" method="post" target="_blank">
+                <form name="search" action="#" th:action="@{/search}" method="post" target="_self">
                     <div class="ui icon transparent input m-margin-tb-tiny" style="color: white">
                         <input style="color: white" type="text" name="query" placeholder="Search...." th:value="${query}">
                         <i onclick="document.forms['search'].submit()" class="search link icon"></i>
@@ -45,16 +42,16 @@
 
 
 <!--顶部图片-->
-<div class="m-bg-type_outer" style="width: 100%;height: 40%">
+<div class="m-bg-type_outer" style="width: 100%;height: 15%">
     <!--<img src="../static/images/friendsbg.jpg" th:src="@{/images/friendsbg.jpg}" alt="" class="ui m-bg image" style="width: 100%;height: 100%">-->
-    <div class="m-bg-class_cover">
-        <div align="center">
-        <div class="ui container" align="center" style="position: relative ;bottom: -575px;" >
-            <div class="m-font-size-title " align="center" style="font-family:'STXingkai'">相关链接</div>
-            <div class="m-font-size-text-init-title m-margin-top" align="center">欢迎入站！</div>
-        </div>
-        </div>
-    </div>
+<!--    <div class="m-bg-class_cover">-->
+<!--        <div align="center">-->
+<!--        <div class="ui container" align="center" style="position: relative ;bottom: -575px;" >-->
+<!--            <div class="m-font-size-title " align="center" style="font-family:'STXingkai'">相关链接</div>-->
+<!--            <div class="m-font-size-text-init-title m-margin-top" align="center">欢迎入站！</div>-->
+<!--        </div>-->
+<!--        </div>-->
+<!--    </div>-->
 </div>
 
 
@@ -89,7 +86,7 @@
                                 <div class="friends-link">
                                     <img src="../static/images/me.jpg" th:src="@{${friendlink.pictureaddress}}"  alt="" class="friends-link-image">
                                     <div class="m-margin-top">
-                                     <h4 class="m-font-size-text-friends m-margin-tb-tiny" th:text="${friendlink.blogname}">Jack</h4>
+                                     <h4 class="m-font-size-text-friends m-margin-tb-tiny" th:text="${friendlink.blogname}">友链名称</h4>
                                     </div>
                                 </div>
                             </div>

@@ -3,27 +3,25 @@ package online.blog.queryvo;
 import java.util.Date;
 
 /**
- * @Description:
+ * @description: 传递给前端展示的单篇博客详情类
+ * @date 2022/04/17
  */
 public class DetailedBlog {
 
     private Long id;
-    private String firstPicture;
+    private String firstPicture;// 博客首页图片
     private String flag;
-    private String title;
-    private String content;
-
-    private Integer views;
-    private Integer commentCount;
-    private Date updateTime;
-    private boolean commentabled;
-    private boolean shareStatement;
-    private boolean appreciation;
-    private String nickname;
-    private String avatar;
-
-    //Type
-    private String typeName;
+    private String title;// 博客标题
+    private String content;// 博客内容
+    private Integer views;// 博客被查看次数
+    private Integer commentCount;// 博客评论数量
+    private Date updateTime;// 博客更新时间
+    private boolean commentabled;// 博客是否开启评论
+    private boolean shareStatement;// 博客是否开启转载声明
+    private boolean appreciation;// 博客是否开启赞赏
+    private String nickname;// 博客创建人昵称
+    private String avatar;// 博客创建人头像
+    private String typeName;// 博客所属分类名称
 
     public DetailedBlog() {
     }

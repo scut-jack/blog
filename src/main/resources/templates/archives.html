@@ -16,21 +16,18 @@
   <div class="ui container">
     <div class="ui inverted secondary stackable menu">
       <h2 class="ui olive header item" style="font-family: STSong">
-        <a href="#" th:href="@{/}"/>Blog
+        <a href="#" th:href="@{/}"/>首页
       </h2>
       <!--<div class="right m-item item m-mobile-hide">-->
       <!--<a href="#" th:href="@{/}" class="m-item item m-mobile-hide "><i class="home icon"></i>首页</a>-->
       <a href="#" th:href="@{/types/-1}" class="m-item item m-mobile-hide"><i class="clone outline icon"></i>分类</a>
-      <a href="#" th:href="@{/archives}" class="m-item item m-mobile-hide"><i class="clock icon"></i>时间轴</a>
-      <a href="#" th:href="@{/message}" class="m-item item m-mobile-hide"><i class="book icon"></i>留言板</a>
-      <a href="#" th:href="@{/picture}" class="m-item item m-mobile-hide"><i class="image icon"></i>回忆</a>
-      <a href="#" th:href="@{/about}" class="active m-item item m-mobile-hide"><i class="info icon"></i>关于我</a>
       <a href="#" th:href="@{/friends}" class="m-item item"><i class="pencil alternate icon"></i>链接</a>
-      <a href="#" th:href="@{/admin}" class="m-item item m-mobile-hide">    登录</a>
-      <a href="#" th:href="@{/admin/blogs}" class="m-item item m-mobile-hide">    后台</a>
+      <a href="#" th:href="@{/archives}" class="m-item item m-mobile-hide"><i class="clock icon"></i>时间轴</a>
+      <a href="#" th:href="@{/admin}" class="m-item item m-mobile-hide">登录</a>
+      <a href="#" th:href="@{/admin/blogs}" class="m-item item m-mobile-hide">后台</a>
       <!--</div>-->
       <div class="right m-item item m-mobile-hide">
-        <form name="search" action="#" th:action="@{/search}" method="post" target="_blank">
+        <form name="search" action="#" th:action="@{/search}" method="post" target="_self">
           <div class="ui icon transparent input m-margin-tb-tiny" style="color: white">
             <input style="color: white" type="text" name="query" placeholder="Search...." th:value="${query}">
             <i onclick="document.forms['search'].submit()" class="search link icon"></i>
@@ -54,7 +51,7 @@
               <div>
                 <time th:text="${#dates.format(blog.updateTime,'yyyy-MM-dd')}">2020/01/01</time>
                 <div class="scientist" >
-                    <a href="#" target="_blank" th:href="@{/blog/{id}(id=${blog.id})}">
+                    <a href="#" target="_self" th:href="@{/blog/{id}(id=${blog.id})}">
                       <h3 class="state" style="text-align:center;font-size: 16px;color: #000;" th:text="${blog.title}">文章标题</h3>
                     </a>
                 </div>
@@ -70,6 +67,27 @@
   <div id="toolbar" class="m-padded-tb-large m-fixed m-right-bottom">
     <a href="#" class="ui teal icon button"><i class="chevron up icon"></i> </a>
   </div>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 <!--底部栏-->
 <footer class="ui inverted vertical segment m-padded-tb-massive m-opacity">
